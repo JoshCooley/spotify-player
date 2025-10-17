@@ -26,7 +26,8 @@ use super::{
     Command, Deserialize, EditAction, GetRequest, IdOrName, ItemId, ItemType, Key, PlaylistCommand,
     Response, Serialize, MAX_REQUEST_SIZE,
 };
-use librespot_playback::audio_backend;
+use cpal::traits::{HostTrait, DeviceTrait};
+use cpal::default_host;
 
 pub async fn start_socket(client: AppClient, socket: UdpSocket, state: Option<SharedState>) {
     let mut buf = [0; MAX_REQUEST_SIZE];
@@ -180,7 +181,13 @@ async fn handle_socket_request(
 }
 
 async fn handle_get_audio_devices_request() -> Result<Vec<u8>> {
-    let devices = audio_backend::list_output_devices();
+    let host = default_host();
+    let mut devices = Vec::new();
+
+    for (device_index, device) in host.output_devices()?.enumerate() {
+        devices.push(format!("  {}. {}", device_index, device.name()?));
+    }
+
     serde_json::to_vec(&devices).context("serialize audio devices")
 }
 

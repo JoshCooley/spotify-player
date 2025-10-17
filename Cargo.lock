@@ -5085,6 +5085,7 @@ dependencies = [
  "clap_complete",
  "clipboard-win",
  "config_parser2",
+ "cpal",
  "crossterm 0.29.0",
  "daemonize",
  "dirs-next",
