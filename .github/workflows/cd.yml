@@ -46,7 +46,7 @@ jobs:
         with:
           use-cross: ${{ matrix.cross_arch }}
           command: build
-          args: --locked --release --target ${{ matrix.target }}
+          args: --locked --release --target ${{ matrix.target }} --features rodio-backend,media-control,image,notify,fzf
 
       - name: Package
         shell: bash
