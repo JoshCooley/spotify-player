@@ -66,6 +66,7 @@ fn handle_get_subcommand(args: &ArgMatches) -> Request {
             let id_or_name = get_id_or_name(args);
             Request::Get(GetRequest::Item(item_type, id_or_name))
         }
+        "audio-devices" => Request::Get(GetRequest::AudioDevices),
         _ => unreachable!(),
     };
 

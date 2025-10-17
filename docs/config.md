@@ -154,6 +154,8 @@ The configuration options for the [Librespot](https://github.com/librespot-org/l
 
 More details on the above configuration options can be found under the [Librespot wiki page](https://github.com/librespot-org/librespot/wiki/Options).
 
+**Note on `backend_device`**: The `backend_device` option allows you to specify the name of the audio device to use for playback. The available devices and their names depend on the audio backend being used by `librespot`.
+
 ### Layout configurations
 
 The layout of the application can be adjusted via these options.

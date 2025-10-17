@@ -172,7 +172,7 @@ pub async fn new_connection(
     );
     mixer.set_volume(volume);
 
-    let backend = audio_backend::find(None).expect("should be able to find an audio backend");
+    let backend = audio_backend::find(device.backend_device.as_deref()).expect("should be able to find an audio backend");
     let player_config = PlayerConfig {
         bitrate: device
             .bitrate
@@ -192,7 +192,7 @@ pub async fn new_connection(
         player_config,
         session.clone(),
         mixer.get_soft_volume(),
-        move || backend(None, AudioFormat::default()),
+        move || backend(device.backend_device.as_deref(), AudioFormat::default()),
     );
 
     let player_event_task = tokio::task::spawn({

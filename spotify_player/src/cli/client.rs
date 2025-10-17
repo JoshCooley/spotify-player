@@ -26,6 +26,7 @@ use super::{
     Command, Deserialize, EditAction, GetRequest, IdOrName, ItemId, ItemType, Key, PlaylistCommand,
     Response, Serialize, MAX_REQUEST_SIZE,
 };
+use librespot_playback::audio_backend;
 
 pub async fn start_socket(client: AppClient, socket: UdpSocket, state: Option<SharedState>) {
     let mut buf = [0; MAX_REQUEST_SIZE];
@@ -119,6 +120,7 @@ async fn handle_socket_request(
         Request::Get(GetRequest::Item(item_type, id_or_name)) => {
             handle_get_item_request(client, item_type, id_or_name).await
         }
+        Request::Get(GetRequest::AudioDevices) => handle_get_audio_devices_request().await,
         Request::Playback(command) => {
             handle_playback_request(client, state, command).await?;
             Ok(Vec::new())
@@ -175,6 +177,11 @@ async fn handle_socket_request(
             Ok(resp)
         }
     }
+}
+
+async fn handle_get_audio_devices_request() -> Result<Vec<u8>> {
+    let devices = audio_backend::list_output_devices();
+    serde_json::to_vec(&devices).context("serialize audio devices")
 }
 
 async fn handle_get_key_request(
@@ -359,7 +366,7 @@ async fn handle_playback_request(
             } else {
                 client
                     .current_user_saved_tracks()
-                    .await?
+                    .await? 
                     .into_iter()
                     .map(|t| t.id.into())
                     .collect()
@@ -408,7 +415,7 @@ async fn handle_playback_request(
         Command::Volume { percent, is_offset } => {
             let volume = playback
                 .as_ref()
-                .context("no active playback found!")?
+                .context("no active playback found!")? 
                 .volume
                 .context("playback has no volume!")?;
             let percent = if is_offset {
@@ -493,7 +500,7 @@ async fn handle_playlist_request(client: &AppClient, command: PlaylistCommand) -
             let following = client
                 .playlist_check_follow(id.clone(), &[uid])
                 .await
-                .context(format!("Could not find playlist '{}'", id.id()))?
+                .context(format!("Could not find playlist '{}'", id.id()))? 
                 .pop()
                 .unwrap();
 
@@ -541,7 +548,8 @@ async fn handle_playlist_request(client: &AppClient, command: PlaylistCommand) -
                 .await?;
 
             let mut result = format!(
-                "Forked {}.\nNew playlist: {}:{}\n",
+                "Forked {}.\nNew playlist: {}:{}
+",
                 id.id(),
                 to.id.id(),
                 to.name

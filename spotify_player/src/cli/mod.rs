@@ -50,6 +50,7 @@ enum ItemId {
 pub enum GetRequest {
     Key(Key),
     Item(ItemType, IdOrName),
+    AudioDevices,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

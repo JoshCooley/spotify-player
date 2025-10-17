@@ -27,6 +27,7 @@ pub fn init_get_subcommand() -> Command {
                     .required(true),
             ),
         ))
+        .subcommand(Command::new("audio-devices").about("List available audio devices"))
 }
 
 fn init_playback_start_subcommand() -> Command {

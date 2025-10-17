@@ -193,6 +193,7 @@ pub struct DeviceConfig {
     pub audio_cache: bool,
     pub normalization: bool,
     pub autoplay: bool,
+    pub backend_device: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize, ConfigParse, Clone)]
@@ -371,6 +372,7 @@ impl Default for DeviceConfig {
             audio_cache: false,
             normalization: false,
             autoplay: false,
+            backend_device: None,
         }
     }
 }
