@@ -184,13 +184,12 @@ async fn handle_socket_request(
 async fn handle_get_audio_devices_request() -> Result<Vec<u8>> {
     let _guard = Gag::stderr()?;
     let host = default_host();
-    let mut devices = Vec::new();
-
-    for (device_index, device) in host.output_devices()?.enumerate() {
-        devices.push(format!("  {}. {}", device_index, device.name()?));
+    let devices = host.output_devices()?;
+    let mut result = Vec::new();
+    for device in devices {
+        result.push(device.name()?);
     }
-
-    serde_json::to_vec(&devices).context("serialize audio devices")
+    serde_json::to_vec(&result).context("serialize audio devices")
 }
 
 async fn handle_get_key_request(

@@ -232,7 +232,11 @@ pub fn handle_cli_subcommand(cmd: &str, args: &ArgMatches) -> Result<()> {
             std::process::exit(1);
         }
         Response::Ok(data) => {
-            println!("{}", String::from_utf8_lossy(&data).replace("\\n", "\n"));
+            if let Ok(value) = serde_json::from_slice::<serde_json::Value>(&data) {
+                println!("{}", serde_json::to_string_pretty(&value).unwrap_or_else(|_| String::from_utf8_lossy(&data).to_string()));
+            } else {
+                println!("{}", String::from_utf8_lossy(&data));
+            }
             std::process::exit(0);
         }
     }
