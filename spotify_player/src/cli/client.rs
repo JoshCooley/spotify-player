@@ -30,6 +30,8 @@ use cpal::traits::{HostTrait, DeviceTrait};
 use cpal::default_host;
 use gag::Gag;
 
+
+
 pub async fn start_socket(client: AppClient, socket: UdpSocket, state: Option<SharedState>) {
     let mut buf = [0; MAX_REQUEST_SIZE];
 
@@ -181,17 +183,30 @@ async fn handle_socket_request(
     }
 }
 
+use serde_json::json;
+use crate::features;
+
 async fn handle_get_audio_devices_request() -> Result<Vec<u8>> {
     let _guard = Gag::stderr()?;
-    let host = default_host();
-    let mut devices = Vec::new();
-
-    for (device_index, device) in host.output_devices()?.enumerate() {
-        devices.push(format!("  {}. {}", device_index, device.name()?));
+    let host = cpal::default_host();
+    let devices = host.output_devices()?;
+    let mut result_devices = Vec::new();
+    for device in devices {
+        result_devices.push(json!({
+            "name": device.name()?,
+            "host": format!("{:?}", host.id()),
+        }));
     }
 
-    serde_json::to_vec(&devices).context("serialize audio devices")
-}
+                let result = json!({
+
+                    "devices": result_devices,
+
+                    "backends": cpal::available_hosts().into_iter().map(|id| format!("{:?}", id)).collect::<Vec<String>>(),
+
+                });
+
+            serde_json::to_vec(&result).context("serialize audio devices")}
 
 async fn handle_get_key_request(
     client: &AppClient,

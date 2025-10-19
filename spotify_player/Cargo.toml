@@ -1,6 +1,6 @@
 [package]
 name = "spotify_player"
-version = "0.21.1"
+version = "0.22.2"
 authors = ["Thang Pham <phamducthang1234@gmail.com>"]
 edition = "2021"
 license = "MIT"
@@ -96,7 +96,7 @@ notify = ["notify-rust"]
 daemon = ["daemonize", "streaming"]
 fzf = ["fuzzy-matcher"]
 
-default = ["rodio-backend", "media-control"]
+default = ["image", "notify"]
 
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }_{ target }{ archive-suffix }"
