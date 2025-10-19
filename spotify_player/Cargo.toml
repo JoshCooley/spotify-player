@@ -14,7 +14,9 @@ anyhow = "1.0.100"
 clap = { version = "4.5.48", features = ["derive", "string"] }
 config_parser2 = "0.1.6"
 crossterm = "0.29.0"
+cpal = "0.16.0"
 dirs-next = "2.0.0"
+gag = "1.0.0"
 librespot-connect = { version = "0.7.1", optional = true }
 librespot-core = { version = "0.7.1" }
 librespot-oauth = { version = "0.7.1" }
@@ -58,7 +60,6 @@ fuzzy-matcher = { version = "0.3.7", optional = true }
 html-escape = "0.2.13"
 rustls = { version = "0.23.32", default-features = false, features = ["ring"] }
 unicode-bidi = "0.3.18"
-cpal = "0.16.0"
 
 [target.'cfg(any(target_os = "windows", target_os = "macos"))'.dependencies.winit]
 version = "0.30.12"

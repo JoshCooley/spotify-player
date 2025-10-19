@@ -28,6 +28,7 @@ use super::{
 };
 use cpal::traits::{HostTrait, DeviceTrait};
 use cpal::default_host;
+use gag::Gag;
 
 pub async fn start_socket(client: AppClient, socket: UdpSocket, state: Option<SharedState>) {
     let mut buf = [0; MAX_REQUEST_SIZE];
@@ -181,6 +182,7 @@ async fn handle_socket_request(
 }
 
 async fn handle_get_audio_devices_request() -> Result<Vec<u8>> {
+    let _guard = Gag::stderr()?;
     let host = default_host();
     let mut devices = Vec::new();
 
